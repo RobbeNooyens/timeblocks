@@ -17,7 +17,11 @@ body {
 }
 
 .time-block.past {
-    background-color: #f0f0f0;
+    background-color: #d0d0d0; /* Darker background color for past blocks */
+}
+
+.time-block.selected {
+    background-color: #d0e7ff;
 }
 
 .block-time {

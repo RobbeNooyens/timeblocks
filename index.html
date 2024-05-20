@@ -12,7 +12,10 @@
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mt-4">
             <h1>Time Block Manager</h1>
-            <button id="settingsButton" class="btn btn-primary">Settings</button>
+            <div>
+                <button id="settingsButton" class="btn btn-primary">Settings</button>
+                <button id="mergeButton" class="btn btn-secondary ml-2">Merge Selected Blocks</button>
+            </div>
         </div>
         <div id="timeBlocks" class="mt-4"></div>
     </div>
@@ -43,11 +46,7 @@
                                 <option value="15">15:00</option>
                                 <option value="20">20:00</option>
                                 <option value="30">30:00</option>
-                                <option value="60">1:00:00</option>
-                                <option value="120">2:00:00</option>
-                                <option value="180">3:00:00</option>
-                                <option value="240">4:00:00</option>
-                                <option value="300">5:00:00</option>
+                                <option value="60">60:00</option>
                             </select>
                         </div>
                     </form>

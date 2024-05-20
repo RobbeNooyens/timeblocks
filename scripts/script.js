@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const timeBlocksContainer = document.getElementById('timeBlocks');
 
     let selectedTimeslots = [];
+    let blocksToMerge = [];
 
     // Load settings from localStorage
     let startTime = localStorage.getItem('startTime') || '00:00';
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function initialize() {
         selectedTimeslots = [];
+        blocksToMerge = [];
         createBlocks(timeBlocksContainer, startTime, endTime, blockLength);
     }
 
@@ -37,4 +39,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.addEventListener('input', (event) => {
         handleInput(event);
     });
+
+    const mergeButton = document.createElement('button');
+    mergeButton.innerText = 'Merge Selected Blocks';
+    mergeButton.id = 'mergeButton';
+    mergeButton.classList.add('btn', 'btn-secondary', 'ml-2');
+    document.querySelector('.d-flex').appendChild(mergeButton);
 });

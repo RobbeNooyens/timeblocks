@@ -74,6 +74,8 @@ function saveSettings() {
     localStorage.setItem('blockLength', blockLength);
     startTime = timeIntervalSlider[0];
     endTime = timeIntervalSlider[1];
-    // createBlocks(timeBlocksContainer, timeIntervalSlider[0], timeIntervalSlider[1], blockLength)
+    // Clear merged blocks
+    localStorage.removeItem('mergedBlocks');
+    mergedBlocks = [];
     return blockLength;
 }

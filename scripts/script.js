@@ -18,6 +18,16 @@ function initialize() {
     createBlocks(timeBlocksContainer, startTime, endTime, blockLength);
 }
 
+function reset() {
+    localStorage.clear();
+    // Save startTime, endTime, and blockLength
+    localStorage.setItem('startTime', startTime);
+    localStorage.setItem('endTime', endTime);
+    localStorage.setItem('blockLength', blockLength);
+    localStorage.setItem('mergedBlocks', JSON.stringify(mergedBlocks));
+    initialize();
+}
+
 document.addEventListener('DOMContentLoaded', (event) => {
     initialize();
 
@@ -57,3 +67,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     loadContent();
 });
+
+// Add eventlistener to Reset button to reset the app on click
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', reset);

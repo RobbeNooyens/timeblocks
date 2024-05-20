@@ -1,25 +1,35 @@
 function createBlocks(container, startTime, endTime, blockLength) {
     container.innerHTML = '';
-    let start = moment(startTime, 'HH:mm');
-    let end = moment(endTime, 'HH:mm');
+    let start = timeStringToMoment(startTime);
+    let end = timeStringToMoment(endTime);
+    let blockDuration = moment.duration(blockLength, 'minutes');
+
     while (start.isBefore(end)) {
         const block = document.createElement('div');
         block.className = 'time-block';
-        block.dataset.time = start.format('HH:mm');
+        block.dataset.time = start.format('DD:HH:mm');
         block.innerHTML = `
-            <span>${start.format('HH:mm')}</span>
+            <span>${start.format('H:mm')}</span>
             <input type="checkbox" class="checkbox">
             <div contenteditable="true" class="editable"></div>
         `;
         container.appendChild(block);
-        start.add(blockLength, 'minutes');
+        start.add(blockDuration);
     }
+}
+
+function timeStringToMoment(time) {
+    const parts = time.split(':');
+    if (parts.length === 3) {
+        return moment().startOf('day').add(1, 'days').add(parseInt(parts[1]), 'hours').add(parseInt(parts[2]), 'minutes');
+    }
+    return moment().startOf('day').add(parseInt(parts[0]), 'hours').add(parseInt(parts[1]), 'minutes');
 }
 
 function updateBlockStatus() {
     const now = moment();
     document.querySelectorAll('.time-block').forEach(block => {
-        const blockTime = moment(block.dataset.time, 'HH:mm');
+        const blockTime = timeStringToMoment(block.dataset.time);
         if (blockTime.isBefore(now)) {
             block.classList.add('past');
         } else {

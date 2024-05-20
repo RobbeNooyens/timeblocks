@@ -1,25 +1,22 @@
-let selectedTimeslots = [];
-let blocksToMerge = [];
-let mergedBlocks = JSON.parse(localStorage.getItem('mergedBlocks')) || [];
-
 function createBlocks(container, startTime, endTime, blockLength) {
     container.innerHTML = '';
-    let start = timeStringToMoment(startTime);
-    let end = timeStringToMoment(endTime);
+    let start = minutesToMoment(timeToMinutes(startTime));
+    let end = minutesToMoment(timeToMinutes(endTime));
     let blockDuration = moment.duration(blockLength, 'minutes');
-
+    console.log('Creating blocks from', start.format('DD:HH:mm'), 'to', end.format('DD:HH:mm'), 'with block length', blockDuration.asMinutes(), 'minutes');
     while (start.isBefore(end)) {
         const timeString = start.format('DD:HH:mm');
         if (!mergedBlocks.includes(timeString)) {
             const block = document.createElement('div');
-            block.className = 'time-block d-flex align-items-center';
+            block.className = `time-block d-flex align-items-center ${start.isBefore(moment()) ? 'time-block-past' : ''}`;
             block.dataset.time = timeString;
             block.innerHTML = `
                 <span class="block-time">${start.format('H:mm')}</span>
                 <div contenteditable="true" class="editable flex-grow-1 mx-3"></div>
                 <input type="checkbox" class="checkbox">
             `;
-            block.addEventListener('click', () => selectBlock(block));
+            block.querySelector('.checkbox').addEventListener('change', () => selectBlock(block));
+            // block.addEventListener('click', () => selectBlock(block));
             container.appendChild(block);
 
             // Load content from localStorage
@@ -41,6 +38,10 @@ function timeStringToMoment(time) {
         return moment().startOf('day').add(1, 'days').add(parseInt(parts[1]), 'hours').add(parseInt(parts[2]), 'minutes');
     }
     return moment().startOf('day').add(parseInt(parts[1]), 'hours').add(parseInt(parts[2]), 'minutes');
+}
+
+function minutesToMoment(minutes) {
+    return moment().startOf('day').add(minutes, 'minutes');
 }
 
 function updateBlockStatus() {

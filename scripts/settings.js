@@ -43,12 +43,10 @@ function formatTime(minutes) {
     const mins = minutes % 60;
     const dayPrefix = day === 1 ? "1:" : "";
     const formattedTime = `${dayPrefix}${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
-    console.log('Formatted time:', formattedTime);
     return formattedTime;
 }
 
 function timeToMinutes(time) {
-    console.log('Converting time to minutes:', time);
     const parts = time.split(':');
     let dayOffset = 0;
     let hours = 0;
@@ -64,7 +62,6 @@ function timeToMinutes(time) {
     }
 
     const totalMinutes = dayOffset + hours * 60 + minutes;
-    console.log('Converted to total minutes:', totalMinutes);
     return totalMinutes;
 }
 
@@ -75,5 +72,8 @@ function saveSettings() {
     localStorage.setItem('startTime', timeIntervalSlider[0]);
     localStorage.setItem('endTime', timeIntervalSlider[1]);
     localStorage.setItem('blockLength', blockLength);
+    startTime = timeIntervalSlider[0];
+    endTime = timeIntervalSlider[1];
+    // createBlocks(timeBlocksContainer, timeIntervalSlider[0], timeIntervalSlider[1], blockLength)
     return blockLength;
 }

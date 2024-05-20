@@ -16,7 +16,7 @@ body {
     align-items: center;
 }
 
-.time-block.past {
+.time-block-past {
     background-color: #d0d0d0; /* Darker background color for past blocks */
 }
 
@@ -35,4 +35,7 @@ body {
 
 .checkbox {
     margin-left: 10px;
+    width: 25px;   /* Increase the width */
+    height: 25px;  /* Increase the height */
+    transform: scale(1.5); /* Further enlarge the checkbox */
 }

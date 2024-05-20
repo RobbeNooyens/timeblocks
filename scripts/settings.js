@@ -12,7 +12,7 @@ function initializeSlider(startTime, endTime) {
         connect: true,
         range: {
             'min': 0,
-            'max': 1440
+            'max': 2160 // Maximum value to cover 24 hours for day one and 24 hours for day two minus 1 minute
         },
         step: 15,
         tooltips: [true, true],
@@ -27,7 +27,6 @@ function initializeSlider(startTime, endTime) {
     });
 
     timeIntervalSlider.noUiSlider.on('update', (values, handle) => {
-        // Do nothing if values is [Nan, Nan]
         console.log('Slider updated with values:', values);
         document.getElementById('timeIntervalValues').innerHTML = `Start: ${values[0]}, End: ${values[1]}`;
         if (handle === 0) {
@@ -39,15 +38,34 @@ function initializeSlider(startTime, endTime) {
 }
 
 function formatTime(minutes) {
-    const hours = Math.floor(minutes / 60);
+    const day = Math.floor(minutes / 1440);
+    const hours = Math.floor((minutes % 1440) / 60);
     const mins = minutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    const dayPrefix = day === 1 ? "1:" : "";
+    const formattedTime = `${dayPrefix}${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+    console.log('Formatted time:', formattedTime);
+    return formattedTime;
 }
 
 function timeToMinutes(time) {
     console.log('Converting time to minutes:', time);
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
+    const parts = time.split(':');
+    let dayOffset = 0;
+    let hours = 0;
+    let minutes = 0;
+
+    if (parts.length === 3) {
+        dayOffset = 1440;
+        hours = parseInt(parts[1], 10);
+        minutes = parseInt(parts[2], 10);
+    } else if (parts.length === 2) {
+        hours = parseInt(parts[0], 10);
+        minutes = parseInt(parts[1], 10);
+    }
+
+    const totalMinutes = dayOffset + hours * 60 + minutes;
+    console.log('Converted to total minutes:', totalMinutes);
+    return totalMinutes;
 }
 
 function saveSettings() {

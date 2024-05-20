@@ -1,5 +1,6 @@
 let selectedTimeslots = [];
 let blocksToMerge = [];
+let mergedBlocks = JSON.parse(localStorage.getItem('mergedBlocks')) || [];
 
 function createBlocks(container, startTime, endTime, blockLength) {
     container.innerHTML = '';
@@ -9,23 +10,25 @@ function createBlocks(container, startTime, endTime, blockLength) {
 
     while (start.isBefore(end)) {
         const timeString = start.format('DD:HH:mm');
-        const block = document.createElement('div');
-        block.className = 'time-block d-flex align-items-center';
-        block.dataset.time = timeString;
-        block.innerHTML = `
-            <span class="block-time">${start.format('H:mm')}</span>
-            <div contenteditable="true" class="editable flex-grow-1 mx-3"></div>
-            <input type="checkbox" class="checkbox">
-        `;
-        block.addEventListener('click', () => selectBlock(block));
-        container.appendChild(block);
-        start.add(blockDuration);
+        if (!mergedBlocks.includes(timeString)) {
+            const block = document.createElement('div');
+            block.className = 'time-block d-flex align-items-center';
+            block.dataset.time = timeString;
+            block.innerHTML = `
+                <span class="block-time">${start.format('H:mm')}</span>
+                <div contenteditable="true" class="editable flex-grow-1 mx-3"></div>
+                <input type="checkbox" class="checkbox">
+            `;
+            block.addEventListener('click', () => selectBlock(block));
+            container.appendChild(block);
 
-        // Load content from localStorage
-        const savedContent = localStorage.getItem(timeString);
-        if (savedContent) {
-            block.querySelector('.editable').innerHTML = savedContent;
+            // Load content from localStorage
+            const savedContent = localStorage.getItem(timeString);
+            if (savedContent) {
+                block.querySelector('.editable').innerHTML = savedContent;
+            }
         }
+        start.add(blockDuration);
     }
 
     // Update block status for past blocks
@@ -101,6 +104,7 @@ function mergeBlocks() {
         if (block !== earliestBlock) {
             mergedContent += block.querySelector('.editable').innerHTML + ' ';
             localStorage.removeItem(block.dataset.time);
+            mergedBlocks.push(block.dataset.time);
             block.remove();
         } else {
             mergedContent += block.querySelector('.editable').innerHTML + ' ';
@@ -109,15 +113,15 @@ function mergeBlocks() {
 
     earliestBlock.querySelector('.editable').innerHTML = mergedContent.trim();
     localStorage.setItem(earliestTime, mergedContent.trim());
+    localStorage.setItem('mergedBlocks', JSON.stringify(mergedBlocks));
     earliestBlock.classList.remove('selected');
     blocksToMerge = [];
 
     console.log('Merged Content:', mergedContent);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const mergeButton = document.getElementById('mergeButton');
-    mergeButton.addEventListener('click', mergeBlocks);
-
-    loadContent();
-});
+function unmergeBlocks() {
+    mergedBlocks = [];
+    localStorage.removeItem('mergedBlocks');
+    initialize();
+}

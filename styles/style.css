@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+#timeBlocks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.time-block {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+}
+
+.time-block.past {
+    background-color: #f0f0f0;
+}
+
+.time-block.editable {
+    border: 2px solid #007bff;
+}
+
+.time-block .checkbox {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

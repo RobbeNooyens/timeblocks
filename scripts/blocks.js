@@ -1,3 +1,5 @@
+let selectedTimeslots = [];
+
 function createBlocks(container, startTime, endTime, blockLength) {
     container.innerHTML = '';
     let start = timeStringToMoment(startTime);
@@ -44,15 +46,19 @@ function handleInput(event) {
         localStorage.setItem(block.dataset.time, event.target.innerHTML);
     } else if (event.target.classList.contains('checkbox')) {
         const block = event.target.closest('.time-block');
-        localStorage.setItem(block.dataset.time + '-checked', event.target.checked);
+        const time = block.dataset.time;
+        if (event.target.checked) {
+            selectedTimeslots.push(time);
+        } else {
+            selectedTimeslots = selectedTimeslots.filter(t => t !== time);
+        }
+        console.log('Selected Timeslots:', selectedTimeslots);
     }
 }
 
 function loadContent() {
     document.querySelectorAll('.time-block').forEach(block => {
         const content = localStorage.getItem(block.dataset.time);
-        const isChecked = localStorage.getItem(block.dataset.time + '-checked') === 'true';
         block.querySelector('.editable').innerHTML = content || '';
-        block.querySelector('.checkbox').checked = isChecked;
     });
 }

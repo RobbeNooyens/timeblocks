@@ -3,8 +3,8 @@ body {
 }
 
 #timeBlocks {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
@@ -12,20 +12,23 @@ body {
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 5px;
-    text-align: center;
-    position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .time-block.past {
     background-color: #f0f0f0;
 }
 
-.time-block.editable {
-    border: 2px solid #007bff;
+.block-time {
+    min-width: 60px;
 }
 
-.time-block .checkbox {
-    position: absolute;
-    top: 5px;
-    right: 5px;
+.editable {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.checkbox {
+    margin-left: 10px;
 }
